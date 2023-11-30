@@ -1,4 +1,5 @@
 <?php
+
 $text = <<<TXT
 <p class="big">
 	Год основания:<b>1589 г.</b> Волгоград отмечает день города в <b>2-е воскресенье сентября</b>. <br>В <b>2023 году</b> эта дата - <b>10 сентября</b>.
@@ -12,53 +13,51 @@ $text = <<<TXT
 </p>
 TXT;
 
+$Max_words=29;
+$Words_now=0;//количество слов
 
 function Is_this_Word(string $str){
-    if(preg_match('/</',$str))
-    {
-        // если слово - это тег
+    if(preg_match('/</',$str))// если слово - это тег
         return false;
-    }
-    if(preg_match('/[\wА-яЁё]+/',$str)){
-        //чтобы слово состояло из букв (чтобы просто точка не принималась за слово)
+    if(preg_match('/[\wА-яЁё]+/',$str)){//чтобы слово состояло из букв (чтобы просто точка не принималась за слово)
         return true;
     }
     else{
         return  false;
     }
 }
-$text=preg_replace('/</',' <',$text);
-//добавляем пробел перед тегами, чтобы строка корректно разбивалась на слова
-
+$text=preg_replace('/</',' <',$text);//добавляем пробел перед тегами, чтобы строка корректно разбивалась на слова
 $array = explode('>', $text);
-
-$wordCount=0;//количество слов
-for($i=0;$i<count($array);$i++)
-{
-    if(preg_match('/^\s*?<+/',$array[$i]))//если строка - это тег
+foreach ($array as $str):
+    if(preg_match('/^\s*?<+/',$str))//если строка - это тег
     {
-        print($array[$i].'>');
+        print($str.'>');
     }
     else
     {
-        $words=explode(' ',$array[$i].'> ');//разбиваем строку на слова
-        for($j=0;$j<count($words);$j++)
-        {
-            if(Is_this_Word($words[$j]))
+        $words=explode(' ',$str.'> ');//разбиваем строкуу на слова
+        foreach ($words as $word):
+            if(Is_this_Word($word))
             {
-                if($wordCount<29)
+                if($Words_now<$Max_words-1)
                 {
-                    $wordCount++;
-                    print($words[$j]. ' ');
+                    $Words_now++;
+                    print($word. ' ');
+                }
+                else{
+                    if($Words_now==$Max_words-1)
+                    {
+                        print($word. '...');
+                        $Words_now++;
+                    }
                 }
             }
             else{
-                if($wordCount<29)
+                if($Words_now<$Max_words)
                 {
-                    print($words[$j]. ' ');//знаки препинания
+                    print($word. ' ');//это знаки препинания
                 }
             }
-        }
-
+        endforeach;
     }
-}
+endforeach;
