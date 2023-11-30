@@ -21,23 +21,5 @@ array_map(function ($item) use (&$result,$lessons) {
             ? $result[$item[0]][$item[1]] + $item[2] : $item[2];
 }, $data);
 
+include 'view.php';
 ?>
-
-<?php include 'footer.php'?>
-
-<?php foreach($lessons as $lesson):?>
-    <th><?=$lesson?></th>
-<?php endforeach;?>
-        </tr>
-    <?php foreach($result as $key=>$res):?>
-    <tr>
-            <td><?= $key?></td>
-        <?php foreach($lessons as $lesKey=>$lesVal):?>
-            <td><?=isset($res[$lessons[$lesKey]])? $res[$lessons[$lesKey]]:'' ?></td>
-
-        <?php endforeach;?>
-
-    </tr>
-    <?php endforeach;?>
-
-<?php include 'footer.php'?>
